@@ -142,7 +142,9 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                           child: Container(
                             height: viewModel.dynamicFooterHeight,
                             decoration: BoxDecoration(border: kDebugMode ? Border.all() : null),
-                            child: widget.config.footer!.builder(status: viewModel.footerState),
+                            child: widget.config.footer!.builder(
+                              status: viewModel.footerState,
+                            ),
                           ),
                         )
                       : const SizedBox.shrink(),

@@ -136,7 +136,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       ///纠正offset为阈值
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState == HeaderState.idle) {
+          if (headerState == HeaderState.idle) {
             log("滑动达到触发器的阈值. 触发器类型 = $currentRefreshType 越界偏移 = $outOfRangeOffset 越界阈值 = $currentRefreshThreshold");
             //可以激活触发器
             headerState = HeaderState.canLoading;
@@ -157,7 +157,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       //只有canLoading才可以放弃执行’刷新‘操作
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState == HeaderState.canLoading) {
+          if (headerState == HeaderState.canLoading) {
             log("滑动未达到触发器的阈值");
             headerState = HeaderState.idle;
           }
@@ -244,8 +244,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
     try {
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState != HeaderState.canLoading) {
-            throw 'HeaderState != HeaderState.canLoading, = $HeaderState';
+          if (headerState != HeaderState.canLoading) {
+            throw 'headerState != HeaderState.canLoading, = $headerState';
           }
 
           // scroll到漏出header即可，如果有多余的scroll offset
@@ -296,8 +296,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       log('[todoRefresh]');
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState != HeaderState.loading) {
-            throw 'HeaderState != HeaderState.loading, = $HeaderState';
+          if (headerState != HeaderState.loading) {
+            throw 'headerState != headerState.loading, = $headerState';
           }
 
           try {
@@ -347,8 +347,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       log('[finishRefresh]');
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState != HeaderState.loaded) {
-            throw 'HeaderState != HeaderState.loaded, = $HeaderState';
+          if (headerState != HeaderState.loaded) {
+            throw 'headerState != HeaderState.loaded, = $headerState';
           }
 
           await Future.delayed(const Duration(milliseconds: 100));
@@ -386,8 +386,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       log('[failRefresh]');
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
-          if (HeaderState != HeaderState.failed) {
-            throw 'HeaderState != HeaderState.failed, = $HeaderState';
+          if (headerState != HeaderState.failed) {
+            throw 'headerState != HeaderState.failed, = $headerState';
           }
 
           await Future.delayed(const Duration(milliseconds: 100));
