@@ -87,12 +87,7 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
 
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => CustomRefreshViewModel(config: widget.config),
-        onViewModelReady: (CustomRefreshViewModel viewModel) async {
-          if (header?.initialRefresh == true) {
-            //首次初始化刷新
-            await header!.onRefresh(viewModel: viewModel);
-          }
-        },
+        onViewModelReady: (CustomRefreshViewModel viewModel) async {},
         builder: (BuildContext context, CustomRefreshViewModel viewModel, Widget? child) {
           ///第一次build时,hasClients = false
           // afterBuild2(viewModel);
