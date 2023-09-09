@@ -32,7 +32,7 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshHeaderConfig customHeaderConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshHeaderConfig? customHeaderConfigBuilder(BuildContext context, VM viewModel) {
     return CustomRefreshHeaderConfig(
       initialRefresh: initialRefresh,
       top: 0,
@@ -76,7 +76,7 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshFooterConfig customFooterConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshFooterConfig? customFooterConfigBuilder(BuildContext context, VM viewModel) {
     return CustomRefreshFooterConfig(
       maxExtent: refreshWidgetExtent,
       bottom: 0,
@@ -115,7 +115,7 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshEmptyConfig customEmptyConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshEmptyConfig? customEmptyConfigBuilder(BuildContext context, VM viewModel) {
     return CustomRefreshEmptyConfig(
       builder: ({required CustomRefreshViewModel refresh}) {
         if (viewModel.isDataEmpty) {
