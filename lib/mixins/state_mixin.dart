@@ -48,11 +48,9 @@ mixin CustomHeaderStateMixin {
   /// ***
   @protected
   set footerState(FooterState s) {
-    if (_footerState != FooterState.noMore) {
-      _footerState = s;
-      log("footerState = $_footerState");
-      rebuildUi();
-    }
+    _footerState = s;
+    log("footerState = $_footerState");
+    rebuildUi();
   }
 
   // /// 直接设置
@@ -106,6 +104,7 @@ mixin CustomHeaderStateMixin {
         failRefresh();
         break;
       case FooterState.noMore:
+        noMoreRefresh();
         break;
       default:
         break;
@@ -120,6 +119,9 @@ mixin CustomHeaderStateMixin {
 
   @protected
   void finishRefresh();
+
+  @protected
+  void noMoreRefresh();
 
   @protected
   void failRefresh();

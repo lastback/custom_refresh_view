@@ -28,25 +28,32 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
 
   @override
   Future futureToRun() async {
-    initialRefresh();
+    if (headerConfig?.initialRefresh == true) {
+      await goRefresh();
+    }
   }
 
   /// 初始化刷新
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  @protected
-  initialRefresh() async {
-    if (headerConfig?.initialRefresh == true) {
-      //等待 scrollController hasClients
-      await Future.delayed(const Duration(milliseconds: 500));
-      await scrollController.animateTo(
-        -1 * headerConfig!.maxExtent.truncateToDouble(),
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.ease,
-      );
-      preventSpringback();
-      goStateRoute();
+  goRefresh() async {
+    //等待 scrollController hasClients
+    try {
+      if (headerState == HeaderState.idle) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        await scrollController.animateTo(
+          -1 * headerConfig!.maxExtent.truncateToDouble(),
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.ease,
+        );
+        preventSpringback();
+        goStateRoute();
+      } else {
+        throw 'headerState != HeaderState.idle, headerState = $headerState';
+      }
+    } catch (e) {
+      log('$e');
     }
   }
 
@@ -180,13 +187,13 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
     switch (currentRefreshType) {
       case EnumCustomRefreshType.header:
         {
-          await Future.delayed(const Duration(milliseconds: 500));
+          await Future.delayed(const Duration(milliseconds: 100));
 
           if (disposed) return;
 
           super.springback(hasMore);
 
-          await Future.delayed(const Duration(milliseconds: 500));
+          await Future.delayed(const Duration(milliseconds: 100));
 
           if (disposed) return;
         }
@@ -194,7 +201,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       case EnumCustomRefreshType.footer:
         {
           if (!hasMore) {
-            await Future.delayed(const Duration(milliseconds: 500));
+            await Future.delayed(const Duration(milliseconds: 100));
           }
 
           if (disposed) return;
@@ -202,7 +209,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
           super.springback(hasMore);
 
           if (!hasMore) {
-            await Future.delayed(const Duration(milliseconds: 500));
+            await Future.delayed(const Duration(milliseconds: 100));
           }
 
           if (disposed) return;
@@ -302,7 +309,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
 
           try {
             log("顶部触发器loading");
-            await headerConfig!.onRefresh(viewModel: this);
+            await headerConfig!.onRefresh(refresh: this);
             headerState = HeaderState.loaded;
             springback(true);
           } catch (e) {
@@ -320,8 +327,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
           try {
             log("底部触发器loading");
             footerState = FooterState.loading;
-            bool hasMore = await config.footer!.onLoading(viewModel: this);
-            footerState = FooterState.loaded;
+            bool hasMore = await config.footer!.onLoading(refresh: this);
+            footerState = hasMore ? FooterState.loaded : FooterState.noMore;
             springback(hasMore);
           } catch (e) {
             log("底部触发器failed");
@@ -360,6 +367,34 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
         case EnumCustomRefreshType.footer:
           if (footerState != FooterState.loaded) {
             throw 'footerState != FooterState.loaded, = $footerState';
+          }
+
+          await Future.delayed(const Duration(milliseconds: 100));
+
+          if (disposed) return;
+
+          resetScroll();
+          break;
+        default:
+      }
+    } catch (e) {
+      log('$e');
+    }
+  }
+
+  /// `state route` 完成`刷新`&没有更多数据
+  /// - 状态是noMore则route到此
+  /// ***
+  /// [CustomRefreshScrollMixin]
+  /// ***
+  @override
+  noMoreRefresh() async {
+    try {
+      log('[nomoreRefresh]');
+      switch (currentRefreshType) {
+        case EnumCustomRefreshType.footer:
+          if (footerState != FooterState.noMore) {
+            throw 'footerState != FooterState.noMore, = $footerState';
           }
 
           await Future.delayed(const Duration(milliseconds: 100));
@@ -441,12 +476,17 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
         }
         break;
       case EnumCustomRefreshType.footer:
-        if ([FooterState.loaded, FooterState.failed].contains(footerState)) {
+        if ([FooterState.loaded, FooterState.noMore, FooterState.failed].contains(footerState)) {
           footerState = FooterState.idle;
           _dynamicFooterHeight = 0;
         }
         break;
       default:
+        headerState = HeaderState.idle;
+        _dynamicHeaderHeight = 0;
+        footerState = FooterState.idle;
+        _dynamicFooterHeight = 0;
+        break;
     }
   }
 }

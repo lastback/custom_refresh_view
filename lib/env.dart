@@ -65,6 +65,8 @@ class CustomRefreshConfig {
 
   CustomRefreshScrollConfig scrollConfig;
 
+  CustomRefreshEmptyConfig? emptyConfig;
+
   /// `自定义刷新控件` 基础配置 view
   /// ***
   /// [CustomRefreshView]
@@ -73,6 +75,7 @@ class CustomRefreshConfig {
     required this.scrollConfig,
     this.header,
     this.footer,
+    this.emptyConfig,
   });
 }
 
@@ -136,7 +139,7 @@ class CustomRefreshHeaderConfig {
   /// ***
   /// [CustomRefreshView]
   /// ***
-  Future<void> Function({required CustomRefreshViewModel viewModel}) onRefresh;
+  Future<void> Function({required CustomRefreshViewModel refresh}) onRefresh;
 
   ///
   /// `自定义刷新控件` 刷新配置 view
@@ -180,7 +183,7 @@ class CustomRefreshFooterConfig {
   ///
   /// 返回值
   /// - `bool` 是否有更多的数据
-  Future<bool> Function({required CustomRefreshViewModel viewModel}) onLoading;
+  Future<bool> Function({required CustomRefreshViewModel refresh}) onLoading;
 
   ///
   /// `自定义刷新控件` 加载配置 view
@@ -195,5 +198,29 @@ class CustomRefreshFooterConfig {
     this.bottom,
     this.left,
     this.right,
+  });
+}
+
+class CustomRefreshEmptyConfig {
+  /// 是否初始化激活组件
+  /// ***
+  /// [CustomRefreshView]
+  /// ***
+  bool initialRefresh = false;
+
+  /// `刷新` 组件
+  /// ***
+  /// [CustomRefreshView]
+  /// ***
+  Widget Function({required CustomRefreshViewModel refresh}) builder;
+
+  ///
+  /// `自定义刷新控件` 刷新配置 view
+  /// ***
+  /// [CustomRefreshView]
+  /// ***
+  CustomRefreshEmptyConfig({
+    required this.builder,
+    this.initialRefresh = false,
   });
 }
