@@ -30,7 +30,7 @@ abstract class CustomRefreshModuleViewModel extends FutureViewModel {
   /// ***
   /// [CustomRefreshModuleViewModel]
   /// ***
-  Future<void> refreshData();
+  Future<bool> refreshData();
 
   /// 加载数据
   /// ***

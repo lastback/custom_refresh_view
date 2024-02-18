@@ -6,7 +6,8 @@ import 'package:custom_refresh_view/mixins/state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMixin, CustomHeaderStateMixin {
+class CustomRefreshViewModel extends FutureViewModel
+    with CustomRefreshScrollMixin, CustomHeaderStateMixin {
   final CustomRefreshConfig config;
 
   @override
@@ -139,7 +140,8 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
       rebuildUi();
     }
 
-    if (currentRefreshThreshold != 0 && outOfRangeOffset >= currentRefreshThreshold) {
+    if (currentRefreshThreshold != 0 &&
+        outOfRangeOffset >= currentRefreshThreshold) {
       ///纠正offset为阈值
       switch (currentRefreshType) {
         case EnumCustomRefreshType.header:
@@ -309,7 +311,11 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
 
           try {
             log("顶部触发器loading");
-            await headerConfig!.onRefresh(refresh: this);
+            bool hasMore = await headerConfig!.onRefresh(refresh: this);
+
+            /// 判断有没有没有更多数据了
+            footerState = !hasMore ? FooterState.noMore : FooterState.idle;
+
             headerState = HeaderState.loaded;
             springback(true);
           } catch (e) {
@@ -476,7 +482,7 @@ class CustomRefreshViewModel extends FutureViewModel with CustomRefreshScrollMix
         }
         break;
       case EnumCustomRefreshType.footer:
-        if ([FooterState.loaded, FooterState.noMore, FooterState.failed].contains(footerState)) {
+        if ([FooterState.loaded, FooterState.failed].contains(footerState)) {
           footerState = FooterState.idle;
           _dynamicFooterHeight = 0;
         }

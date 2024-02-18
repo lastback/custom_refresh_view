@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 
-abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> extends StackedView<VM> {
+abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel>
+    extends StackedView<VM> {
   /// `自定义刷新列表` module 基类
   /// ***
   /// [CustomRefreshModuleView]
@@ -32,7 +33,8 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshHeaderConfig? customHeaderConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshHeaderConfig? customHeaderConfigBuilder(
+      BuildContext context, VM viewModel) {
     return CustomRefreshHeaderConfig(
       initialRefresh: initialRefresh,
       top: 0,
@@ -67,7 +69,7 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
         );
       },
       onRefresh: ({required CustomRefreshViewModel refresh}) async {
-        await viewModel.refreshData();
+        return await viewModel.refreshData();
       },
     );
   }
@@ -76,7 +78,8 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshFooterConfig? customFooterConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshFooterConfig? customFooterConfigBuilder(
+      BuildContext context, VM viewModel) {
     return CustomRefreshFooterConfig(
       maxExtent: refreshWidgetExtent,
       bottom: 0,
@@ -115,7 +118,8 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshEmptyConfig? customEmptyConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshEmptyConfig? customEmptyConfigBuilder(
+      BuildContext context, VM viewModel) {
     return CustomRefreshEmptyConfig(
       builder: ({required CustomRefreshViewModel refresh}) {
         if (viewModel.isDataEmpty) {
@@ -139,7 +143,8 @@ abstract class CustomRefreshModuleView<VM extends CustomRefreshModuleViewModel> 
   /// ***
   /// [CustomRefreshModuleView]
   /// ***
-  CustomRefreshScrollConfig customScrollConfigBuilder(BuildContext context, VM viewModel) {
+  CustomRefreshScrollConfig customScrollConfigBuilder(
+      BuildContext context, VM viewModel) {
     return CustomRefreshScrollConfig(
       scrollController: viewModel.scrollController,
       slivers: customSliversBuilder(context, viewModel),

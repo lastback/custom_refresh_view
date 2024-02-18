@@ -139,7 +139,7 @@ class CustomRefreshHeaderConfig {
   /// ***
   /// [CustomRefreshView]
   /// ***
-  Future<void> Function({required CustomRefreshViewModel refresh}) onRefresh;
+  Future<bool> Function({required CustomRefreshViewModel refresh}) onRefresh;
 
   ///
   /// `自定义刷新控件` 刷新配置 view
