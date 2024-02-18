@@ -34,7 +34,8 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => CustomRefreshViewModel(config: widget.config),
         onViewModelReady: (CustomRefreshViewModel viewModel) async {},
-        builder: (BuildContext context, CustomRefreshViewModel viewModel, Widget? child) {
+        builder: (BuildContext context, CustomRefreshViewModel viewModel,
+            Widget? child) {
           return Align(
             // 此处为关键代码, reverse时，slivers数量不够，也能顶上去
             alignment: Alignment.topCenter,
@@ -59,7 +60,8 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                           bottom: header.bottom,
                           child: Container(
                             height: viewModel.dynamicHeaderHeight,
-                            decoration: BoxDecoration(border: kDebugMode ? Border.all() : null),
+                            decoration: BoxDecoration(
+                                border: kDebugMode ? Border.all() : null),
                             child: header.builder(
                               status: viewModel.headerState,
                             ),
@@ -74,7 +76,8 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                           bottom: widget.config.footer?.bottom,
                           child: Container(
                             height: viewModel.dynamicFooterHeight,
-                            decoration: BoxDecoration(border: kDebugMode ? Border.all() : null),
+                            decoration: BoxDecoration(
+                                border: kDebugMode ? Border.all() : null),
                             child: widget.config.footer!.builder(
                               status: viewModel.footerState,
                             ),
@@ -98,7 +101,9 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                       ...scrollConfig.slivers,
                     ],
                   ),
-                  emptyConfig != null ? emptyConfig.builder(refresh: viewModel) : const SizedBox.shrink(),
+                  emptyConfig != null
+                      ? emptyConfig.builder(refresh: viewModel)
+                      : const SizedBox.shrink(),
                 ],
               ),
             ),

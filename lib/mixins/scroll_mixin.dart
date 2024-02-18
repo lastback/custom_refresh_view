@@ -46,7 +46,8 @@ mixin CustomRefreshScrollMixin {
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  double get viewportDimension => scrollHasClients ? scrollPosition.viewportDimension : 0;
+  double get viewportDimension =>
+      scrollHasClients ? scrollPosition.viewportDimension : 0;
 
   /// 滑动视窗是否是空
   /// - `ScrollController` 暂时没有挂接到client
@@ -60,14 +61,18 @@ mixin CustomRefreshScrollMixin {
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  bool get isScrollOutOfRange => scrollHasClients ? scrollPosition.outOfRange : false;
+  bool get isScrollOutOfRange =>
+      scrollHasClients ? scrollPosition.outOfRange : false;
 
   /// 滑动越界超出滑动视窗区域的偏移量
   /// - viewportDimension - extentInside
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  double get scrollOutOfRangeOffset => scrollHasClients ? (scrollPosition.viewportDimension - scrollPosition.extentInside).truncateToDouble() : 0;
+  double get scrollOutOfRangeOffset => scrollHasClients
+      ? (scrollPosition.viewportDimension - scrollPosition.extentInside)
+          .truncateToDouble()
+      : 0;
 
   /// 滑动内容的总范围，eg：高度
   /// ***
@@ -99,13 +104,15 @@ mixin CustomRefreshScrollMixin {
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  double get maxScrollOffset => scrollHasClients ? scrollPosition.maxScrollExtent : 0;
+  double get maxScrollOffset =>
+      scrollHasClients ? scrollPosition.maxScrollExtent : 0;
 
   /// 最小滑动距离
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  double get minScrollOffset => scrollHasClients ? scrollPosition.minScrollExtent : 0;
+  double get minScrollOffset =>
+      scrollHasClients ? scrollPosition.minScrollExtent : 0;
 
   /// 当前滑动越界后刷新的类型
   /// - 刷新&加载
@@ -122,7 +129,8 @@ mixin CustomRefreshScrollMixin {
   void preventSpringback() {
     if (scrollHasClients) {
       log('滑动越界，阻止回弹。');
-      scrollPosition.beginActivity(IdleScrollActivity(scrollPosition as ScrollActivityDelegate));
+      scrollPosition.beginActivity(
+          IdleScrollActivity(scrollPosition as ScrollActivityDelegate));
     }
   }
 
@@ -130,8 +138,14 @@ mixin CustomRefreshScrollMixin {
   /// ***
   /// [CustomRefreshScrollMixin]
   /// ***
-  void springback(bool hasMore) {
+  void springback(bool hasMore, [bool hasError = false]) {
     if (scrollHasClients) {
+      if (hasError) {
+        /// 有错误直接归位
+        log('直接回弹归位0');
+        scrollPosition.activity?.delegate.goBallistic(0);
+        return;
+      }
       if (hasMore && extentTotal > viewportDimension) {
         // 如果有更多数据，则直接向加载的方向快速加载滑动而不是直接回弹
         switch (currentRefreshType) {

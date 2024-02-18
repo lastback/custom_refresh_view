@@ -183,7 +183,7 @@ class CustomRefreshViewModel extends FutureViewModel
   }
 
   @override
-  springback(bool hasMore) async {
+  springback(bool hasMore, [bool hasError = false]) async {
     if (disposed) return;
 
     switch (currentRefreshType) {
@@ -193,7 +193,7 @@ class CustomRefreshViewModel extends FutureViewModel
 
           if (disposed) return;
 
-          super.springback(hasMore);
+          super.springback(hasMore, hasError);
 
           await Future.delayed(const Duration(milliseconds: 100));
 
@@ -208,7 +208,7 @@ class CustomRefreshViewModel extends FutureViewModel
 
           if (disposed) return;
 
-          super.springback(hasMore);
+          super.springback(hasMore, hasError);
 
           if (!hasMore) {
             await Future.delayed(const Duration(milliseconds: 100));
@@ -435,7 +435,7 @@ class CustomRefreshViewModel extends FutureViewModel
 
           if (disposed) return;
 
-          springback(true);
+          springback(true, true);
 
           await Future.delayed(const Duration(milliseconds: 500));
 
@@ -452,7 +452,7 @@ class CustomRefreshViewModel extends FutureViewModel
 
           if (disposed) return;
 
-          springback(true);
+          springback(true, true);
 
           await Future.delayed(const Duration(milliseconds: 500));
 
