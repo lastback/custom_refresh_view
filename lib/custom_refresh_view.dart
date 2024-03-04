@@ -60,8 +60,8 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                           bottom: header.bottom,
                           child: Container(
                             height: viewModel.dynamicHeaderHeight,
-                            decoration: BoxDecoration(
-                                border: kDebugMode ? Border.all() : null),
+                            decoration:
+                                BoxDecoration(border: kDebugMode ? null : null),
                             child: header.builder(
                               status: viewModel.headerState,
                             ),
@@ -76,8 +76,8 @@ class CustomRefreshViewState extends State<CustomRefreshView> {
                           bottom: widget.config.footer?.bottom,
                           child: Container(
                             height: viewModel.dynamicFooterHeight,
-                            decoration: BoxDecoration(
-                                border: kDebugMode ? Border.all() : null),
+                            decoration:
+                                BoxDecoration(border: kDebugMode ? null : null),
                             child: widget.config.footer!.builder(
                               status: viewModel.footerState,
                             ),
